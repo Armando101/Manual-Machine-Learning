@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{wrapfig}
 \usepackage{vmargin}
 
 
@@ -328,14 +329,116 @@ Como vimos anteriormente lo que buscamos en minimizar la función de costos, en 
 	\theta_j := \theta_j -\alpha\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1)\qquad Para\quad j=0\quad y\quad j=1
 	\label{Eq:DG}
 \end{equation}
-Lo que le estamos diciendo es que con cada iteración el valor de $\theta_j$ se tiene que actualizar a un nuevo valor que tiene que ser menor al anterior.\\$\alpha$ es el índice de aprendizaje y lo que hace es controlar qué tan grande el un paso que estamos dando con el gradiente de descenso, si $\alpha$ es muy grande estamos dando pasos muy grandes hacia abajo, si $\alpha$ es pequeño estaremos dando pasos muy pequeños.\\Algo que tenemos que tomar en cuenta para este algoritmo es que tiene que haber una actualización simultanea entre los términos $\theta_0$ y $\theta_1$ como se muestra en la ecuación \ref{Eq:Algoritmo}.
+Lo que le estamos diciendo es que con cada iteración el valor de $\theta_j$ se tiene que actualizar a un nuevo valor que tiene que ser menor al anterior.\\$\alpha$ es el índice de aprendizaje y lo que hace es controlar qué tan grande el un paso que estamos dando con el gradiente de descenso, si $\alpha$ es muy grande estamos dando pasos muy grandes hacia abajo, si $\alpha$ es pequeño estaremos dando pasos muy pequeños. Uno de nuestros objetivos es encontrar el mejor valor de $\alpha$ ya que al dar pasos muy grandes puede que oscile todo el tiempo entre valores bajos y altos entrando en un bucle infinito y puede que no converga. Si $\alpha$ da pasos muy pequeños tardará demasiado nuestro algoritmo en encontrar una solución aparte de consumir muchos recursos. Mas adelante veremos como encontrar el mejor valor para $\alpha$.\\Algo que tenemos que tomar en cuenta para este algoritmo es que tiene que haber una actualización simultanea entre los términos $\theta_0$ y $\theta_1$ como se muestra en las ecuaciones desde la \ref{Eq:A1} a \ref{Eq:A4}.
 \begin{align}
-\notag
-	temp_0&:= \theta_0 -\alpha\frac{\partial}{\partial\theta_0}J(\theta_0,\theta_1)\\\notag
-	temp_1&:= \theta_1 -\alpha\frac{\partial}{\partial\theta_1}J(\theta_0,\theta_1)\\\notag
-	\theta_0&:=temp_0\\\notag
-	\theta_1&:=temp_1\\
-	\label{Eq:Algoritmo}
+	temp_0&:= \theta_0 -\alpha\frac{\partial}{\partial\theta_0}J(\theta_0,\theta_1)\label{Eq:A1}\\
+	temp_1&:= \theta_1 -\alpha\frac{\partial}{\partial\theta_1}J(\theta_0,\theta_1)\label{Eq:A2}\\
+	\theta_0&:=temp_0\label{Eq:A3}\\
+	\theta_1&:=temp_1\label{Eq:A4}
 \end{align}
- 
+Lo que vamos a hacer a continuación es usar el gradiente de descenso para minimizar la función de costo, para esto nos vamos a centrar en las derivadas parciales de dicha función.
+\begin{equation}
+	\frac{\partial}{\partial\theta_j}J(\theta_0, \theta_1)=\frac{\partial}{\partial\theta_j}\frac{1}{2m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})^2=\frac{\partial}{\partial\theta_j}\frac{1}{2m}\sum_{i=0}^{m}(\theta_0+\theta_1x^{(i)}-y^{(i)})^2
+	\label{Eq:GD2}
+\end{equation}
+A partir de la ecuación \ref{Eq:GD2} podemos escribir las derivadas parciales tanto para $\theta_0$ como para $\theta_1$ como se muestra a continuación.
+\begin{align}
+	\frac{\partial}{\partial\theta_0}J(\theta_0, \theta_1)=&\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})\label{Eq:AI1}\\
+	\frac{\partial}{\partial\theta_1}J(\theta_0, \theta_1)=&\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x^{(i)}\label{Eq:AI2}
+\end{align}
+Ahora lo que hacemos es sustituir las ecuaciones \ref{Eq:AI1} y \ref{Eq:AI2} en \ref{Eq:A1} y \ref{Eq:A2} respectivamente. De igual forma tenemos que actualizar $\theta_0$ y $\theta_1$ hasta que convergan.
+\begin{align}
+	\theta_0&:=\theta_0-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})\label{Eq:AI2-1}\\
+	\theta_1&:=\theta_1-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x_1^{(i)}\label{Eq:AI2-2}\\
+\end{align}
+\begin{wrapfigure}[16]{l}{0.58\textwidth}
+	\includegraphics[scale=0.31]{img/CF-RL}
+	\caption{Función de costo para una regresión lineal}
+	\label{Fig:CFRL}
+\end{wrapfigure}
+La función de costos para la regresión lineal siempre será convexa y en forma de arco tal y como se ve en la figura \ref{Fig:CFRL}.\\
+Cuando obtenemos el mínimo de la función siempre será un mínimo global ya que es el único punto más bajo que tiene, a diferencia de la función que se muestra en la figura \ref{Fig:GD1} que también poseé mínimos locales.\\Entonces si encontramos los valores $\theta_0$ y $\theta_1$ del punto más bajo de la función $j(\theta_0, \theta_1)$ y sustituimos dichos valores en la función de hipótesis diremos que dicha función puede predecir un valor con una exactitud aceptable. 
+\chapter{Regresión lineal con múltiples variables}
+\section{Múltiples características}
+Hasta este punto habíamos puesto como ejemplo predecir el precio de una casa dado su tamaño, que pasaría si queremos predecir el precio de una casa pero no sólo tenemos su tamaño como característica si también contamos con otras como el numero de habitaciones, pisos, años que tiene la casa de ser construida, etc. Dichas características se encuentran en la tabla \ref{Tab:Multi}.
+\begin{table}[h]
+		\begin{tabular}{|c|c|c|c||c|}
+			\hline
+			Tamaño ($feet^2$) & Número de habitaciones & Número de pisos&Años de la casa&Precio(\$1000)\\
+			\hline
+			\hline
+			2104&5&1&45&460\\
+			1416&3&2&40&232\\
+			1534&3&2&30&315\\
+			852&2&1&36&4178\\
+			\dots&\dots&\dots&\dots&\dots\\		
+			\hline	
+		\end{tabular}
+	\caption{Múltiples características}
+	\label{Tab:Multi}
+\end{table}
+\\Ahora vamos a hablar sobre la notación que usaremos. El tamaño sera nuestra variable $x_1$ el número de habitaciones será $x_2$ y así sucesivamente, el valor del precio será nuestra variable $y$.\\\\
+\textbf{\textit{$n$}}: Número de características.\\
+\textbf{\textit{$x^{i}$}}: Características del $i$-ésimo dato de entrenamiento (Filas).\\
+\textbf{\textit{$x^{i}_j$}}: Valor de la característica $j$ en el $i$-ésimo dato de entrenamiento.\\\\
+En el ejemplo mostrado en la tabla $n=4$ ya que tenemos 4 características, $m=4$ ya que tenemos 4 datos de entrenamiento. El valor que corresponde a $ x_3^{(2)}=2$ y $x^{(2)}$ se representa como una matriz de $4X1$ cuyos valores son 1416, 3, 2, 40.
+\[x^{(2)}=\left[
+\begin{array}{c}
+	1416\\3\\2\\40
+\end{array}
+\right]
+\]
+Al trabajar con mas características tenemos que cambiar nuestra función de hipótesis como se muestra en la ecuación \ref{Eq:Hip2}.
+\begin{equation}
+	h_\theta(x)=\theta_0+\theta_1x_1+\theta_2x_2+\dots+\theta_nx_n
+	\label{Eq:Hip2}
+\end{equation}
+En nuestro ejemplo $\theta_0$ es el precio base de la casa, $\theta_1$ es el precio por $feet^2$, $\theta_2$ es el precio por una habitación, $\theta_3$ es el precio por un piso y $\theta_4$ es el precio por cada año de la casa, podemos considerar la casa pierde su valor en función de los años por lo tanto $\theta_4$ sería un valor negativo.\\
+$x_1$ es el número de $feet^2$ que tiene la casa, $x_2$ es el número de habitaciones, $x_3$ es el número de pisos que tiene la casa, $x_4$ son los años que tiene la casa. Por convención $x_0^{(i)}=1$. Lo que haremos a continuación será vectorizar las variables $x$ y $\theta$ como se muestra en la ecuación \ref{Eq:Vecto}.
+\begin{equation}
+x=\left[
+\begin{array}{c}
+	x_0\\x_1\\x_2\\\vdots\\x_n
+\end{array}
+\right]\in \mathbb{R}^{n+1}\qquad
+\theta=\left[
+\begin{array}{c}
+\theta_0\\\theta_1\\\theta_2\\\vdots\\\theta_n
+\end{array}
+\right]\in \mathbb{R}^{n+1}\qquad
+\theta^T=\left[
+\begin{array}{ccccc}
+\theta_0&\theta_1&\theta_2&\dots&\theta_n
+\end{array}
+\right]
+\label{Eq:Vecto}
+\end{equation}
+Entonces tenemos que:
+\begin{equation}
+h_\theta(x)=\theta_0x_0+\theta_1x_1+\theta_2x_2+\dots+\theta_nx_n=\theta^Tx
+\label{Eq:HipVecto}
+\end{equation}
+Lo que tenemos que hacer es de igual forma como en el caso de una variable, actualizar los valores de $\theta$ con un algoritmo iterativo hasta que estos convergan.
+\begin{align}
+\theta_0&:=\theta_0-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x_0^{(i)}\label{Eq:AI3-1}\\
+\theta_1&:=\theta_1-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x_1^{(i)}\label{Eq:AI3-2}\\
+\theta_2&:=\theta_2-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x_2^{(i)}\label{Eq:AI3-3}\\
+\dots\notag
+\end{align}
+Visto de otra forma nuestro algoritmo para múltiples variables queda resumido en la ecuación \ref{Eq:AI3-Resumido}
+\begin{equation}
+\theta_j:=\theta_j-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)} \qquad Para\quad j:=0\dots n
+\label{Eq:AI3-Resumido}
+\end{equation}
+\section{Escalamiento de características}
+Al trabajar con múltiples características tenemos que tomar en cuenta el rango de valores que estas toman, por ejemplo tenemos una característica que es el tamaño de la casa cuyos valores oscilan entre 0-2000 y tenemos otra característica que es el número de habitaciones cuyos valores oscilan entre 1-5.\\\\Al ejecutar el gradiente de descenso puede oscilar dando pasos muy grandes o muy pequeños, este comportamiento se sale de nuestro control y puede que el valor nunca converga.\\Lo que hacemos para evitar esto es escalar los valores de nuestras características, es decir que todas tomen un rango similar idealmente entre $-1\underline{<} x_i \underline{<}1$ es aceptable un rango un poco más grande o más pequeño. \\\\Por ejemplo que los rangos de valores de nuestras características se encuentren en $0\underline{<}x_1\underline{<}3$ o $-2\underline{<}x_2\underline{<}0.5$, lo que no está permitido es tomar rangos muy grandes o muy pequeños como $-100\underline{<}x_3\underline{<}100$ o $-0.0001\underline{<}x_4\underline{<}0.0001$.\\La ecuación que usaremos para hacer este escalamiento se muestra en la ecuación \ref{Eq:Esc}.
+\begin{equation}
+	x_i:=\frac{x_i-\mu_i}{s_i}
+	\label{Eq:Esc}
+\end{equation}
+Donde:\\$x_i$ es la característica que queremos escalar.\\$\mu_i$ es el promedio de los valores de dicha característica.\\
+$s_i$ Es el rango de valores (Valor maximo - Valor mínimo).\\\\Por ejemplo si queremos escalar la característica de número de habitaciones haríamos lo siguiente.
+\[
+x_2=\frac{\#Habitaciones-2}{5}
+\]
 \end{document}
