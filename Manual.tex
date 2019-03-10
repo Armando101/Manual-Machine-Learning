@@ -1,4 +1,4 @@
-\documentclass{book}
+\documentclass{report}
 
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
@@ -20,6 +20,8 @@
 \tableofcontents
 \listoffigures
 \listoftables
+\chapter*{Acerca de este manual}
+Este manual fue hecho para guiar a las personas que quieren introducirse al mundo del Machine Learning, este manual es una recopilación del material escrito y en video del curso disponible en la plataforma Coursea por la Universidad de Stanford impartido por Andrew Ng a quien se le da el crédito por el material proporcionado. 
 \chapter{Introducción}
 El aprendizaje automático es una
 de las nuevas tecnologías más emocionantes. Cada vez que usas un buscador web como Google o Bing para hacer una
@@ -441,4 +443,77 @@ $s_i$ Es el rango de valores (Valor maximo - Valor mínimo).\\\\Por ejemplo si q
 \[
 x_2=\frac{\#Habitaciones-2}{5}
 \]
+\section{Índice de aprendizaje}
+Ahora vamos a hablar del parámetro de aprendizaje $\alpha$. Como ya habíamos dicho, uno de nuestros objetivos principales es minimizar la función $J(\theta)$ por lo que a cada iteración ésta debe ser menor, si la graficamos en el eje Y y el número de iteraciones en el eje X, debemos de observar una gráfica en la que si $x\rightarrow\infty$, $y\rightarrow0$. Decimos que $J(\theta)$ converge si decrece menos de $10^{-3}$ en cada iteración.\\\\Si al graficar $J(\theta)$ en el eje Y y el número de iteraciones en el eje X y vemos una curva que conforme $x\rightarrow\infty$, $y\rightarrow\infty$ vemos que no converge, en este caso tenemos que hacer uso de una $\alpha$ más pequeña. El número de iteraciones necesarias para que nuestra función converga es variable, para una aplicación nos puede tomar 30 iteraciones mientras que para otra distinta nos puede tomar 30,000 y para otra aplicación 30,000,000.\\\\Es muy difícil saber de antemano cuantas iteraciones necesitará nuestro algoritmo, podemos dar con un aproximado trazando las gráficas de $J(\theta)$ - Iteraciones y $J(\theta)$ - $\theta$. Otra cosa que hay que tener en cuenta es que para un valor de $\alpha$ lo suficientemente pequeño, $J(\theta)$ debe decrecer en cada iteración, pero si $\alpha$ es muy pequeña, el gradiente de descenso puede converger de una forma mucho más lenta.\\\\Resumiendo:\\Si $\alpha$ es muy pequeño converge muy lento.\\Si $\alpha$ es muy grande $J(\theta)$ puede no decrecer con cada iteración y posiblemente no converger.\\Para escoger valores de $\alpha$ podemos elegir entre 0.001, 0.01, 0.1, 1.
+
+\section{Características y regresión polinomial}
+\begin{wrapfigure}[15]{l}{0.5\textwidth}
+	\includegraphics[scale=0.3]{img/RP}
+	\caption{Regresión polinomial}
+	\label{Fig:RP}
+\end{wrapfigure}
+En ocasiones tenemos datos que al graficarlos no parece que una linea recta se ajuste de la mejor manera sino que tenemos que hacer uso de una función polinomial.\\Veamos el ejemplo de una casa, al graficar el precio y el tamaño vemos que no parece una línea recta, si usamos un polinomio de la forma $\theta_0 + \theta_1x+\theta_2x^2$ vemos como se muestra con la línea azul en la figura \ref{Fig:RP} que se ajusta un poco mejor en cierto rango de valores, sin embargo este polinomio de grado dos tiende a decender con forme el eje x tiende a ser mayor, y no tiene sentido que una casa a mayor tamaño cueste menos.\\Veamos con un polinomio de grado 3 $\theta_0 + \theta_1x+\theta_2x^2+\theta_2x^3$ vemos que se parece en cierta forma a nuestro polinomio de grado 2, sin embargo cuando éste desciende, el de grado 3 incrementa como lo muestra la línea verde en la figura \ref{Fig:RP}, tiene más sentido que una casa a mayo tamaño el precio sea mayor.
+Ahora cómo hacemos para ajustar el modelo cúbico que tiene tres características a nuestro problema de las casas que en este caso sólo tenemos la característica del tamaño y con base en ello obtenemos el precio. Lo que podemos hacer es tomar el tamaño y reemplazarlo por la variable x como vemos en la ecuación \ref{Eq:RP}.También podemos combinar nuestras características con el fin de mejorar nuestra hipótesis, por ejemplo, si tengo dos características (Largo y Ancho de mi casa), las puedo combinar haciendo una sola (Área de mi casa = LargoXAncho).
+\begin{align}
+\notag
+h_\theta(x)&=\theta_0+\theta_1x_1+\theta_2x_2\theta_3x_3\\
+h_\theta(x)&=\theta_0+\theta_1(tama\tilde{n}o)+\theta_2(tama\tilde{n}o)^2\theta_3(tama\tilde{n}o)^3\label{Eq:RP}\\\notag
+x_1&=(tama\tilde{n}o)\\\notag
+x_2&=(tama\tilde{n}o)^2\\\notag
+x_3&=(tama\tilde{n}o)^2
+\end{align}
+Al trabajar con regresión polinomial resulta de gran importancia el escalamiento ya que por ejemplo si el tamaño de la casa va de 1-1000, al elevarlo al cuadrado va de 1-1,000,000 y al elevarlo al cubo es de 1-$10^9$.
+\section{Ecuación Normal}
+La ecuación normal para algunos problemas de regresión lineal nos dará una mejor manera de resolver los valores de $\theta$ para el valor óptimo. Hasta este punto el algoritmo que hemos usado para minimizar nuestra función de costo es el gradiente de descenso que involucra muchas iteraciones. En contraste la ecuación normal nos da un método para despejar $\theta$ de forma analítica, esto para evitar usar un algoritmo iterativo y calcular en un sólo paso el valor óptimo de $\theta$. Lo que hacemos para encontrar el valor mínimo de $\theta$ es igualar la derivada de la función $J(\theta)$ a cero y encontrar los valores de $\theta$.\\\\Tomemos el ejemplo de las casas con múltiples características que tenemos en la tabla \ref{Tab:Multi} lo que haremos será añadir $x_0$ que como vimos anteriormente $x_0^j=1$ quedando como se muestra en la tabla \ref{Tab:Multi2}.
+\begin{table}[h]
+	\begin{tabular}{|c|c|c|c|c||c|}
+		\hline
+		$x_0$&Tamaño ($feet^2$) & Número de habitaciones & Número de pisos&Años de la casa&Precio(\$1000)\\
+		\hline
+		\hline
+		1&2104&5&1&45&460\\
+		1&1416&3&2&40&232\\
+		1&1534&3&2&30&315\\
+		1&852&2&1&36&4178\\
+		\hline	
+	\end{tabular}
+	\caption{Datos de casas}
+	\label{Tab:Multi2}
+\end{table}
+\\Ahora vamos a construir una matriz que contiene todos mis datos de entrenamiento, así como el vector y.
+\[X=\left[
+\begin{array}{ccccc}
+	1&2104&5&1&45\\
+	1&1416&3&2&40\\
+	1&1534&3&2&30\\
+	1&852&2&1&36
+\end{array}
+\right]
+\qquad
+y=\left[
+\begin{array}{c}
+460\\232\\315\\178
+\end{array}
+\right]
+\]
+A partir de estos vectores podemos calcular $\theta$ como se muestra en la ecuación \ref{Eq:ThetaV}. 
+\begin{equation}
+	\theta = (X^TX)^{-1}X^Ty
+	\label{Eq:ThetaV}
+\end{equation}
+Las ventajas de usar la ecuación normal son:
+\begin{itemize}
+	\item No se necesita elegir un valor para $\alpha$
+	\item No se necesita iterar.
+\end{itemize}
+Las ventajas del gradiente de descenso son:
+\begin{itemize}
+	\item Funciona bien aunque \textit{n} sea demasiado grande.
+\end{itemize}
+Las desventajas de la ecuación normal son:
+\begin{itemize}
+	\item Se necesita calcular $(X^TX)^{-1}$
+	\item Es muy lento si \text{n} es muy grande.
+\end{itemize}
+Conviene optar por la ecuación normal cuando $n<10,000$. Cuando queremos resolver un problema por ejemplo de clasificación como regresión logística nos damos cuenta que el algoritmo de la ecuación normal no funciona por lo que tendremos que optar por el gradiente de descenso.
 \end{document}
