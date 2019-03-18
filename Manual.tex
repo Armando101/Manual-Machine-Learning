@@ -3,11 +3,43 @@
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{wrapfig}
 \usepackage{vmargin}
+\usepackage{listings}
+\lstset{language=Matlab}
 
+\usepackage{color}
+
+\definecolor{miverde}{rgb}{0,0.6,0}
+\definecolor{migris}{rgb}{0.5,0.5,0.5}
+\definecolor{mimalva}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+	backgroundcolor=\color{white},   % Indica el color de fondo; necesita que se añada \usepackage{color} o \usepackage{xcolor}
+	captionpos=b,                    % Establece la posición de la leyenda del cuadro de código
+	commentstyle=\color{miverde},    % Estilo de los comentarios
+	escapeinside={\%*}{*)},          % Si quieres incorporar LaTeX dentro del propio código
+	extendedchars=true,              % Permite utilizar caracteres extendidos no-ASCII; solo funciona para codificaciones de 8-bits; para UTF-8 no funciona. En xelatex necesita estar a true para que funcione.
+	frame=single,	                   % Añade un marco al código
+	%keepspaces=true,                 % Mantiene los espacios en el texto. Es útil para mantener la indentación del código(puede necesitar columns=flexible).
+	keywordstyle=\color{blue},       % estilo de las palabras clave
+	language=Matlab,                 % El lenguaje del código
+	otherkeywords={*,...},           % Si se quieren añadir otras palabras clave al lenguaje
+	numbers=left,                    % Posición de los números de línea (none, left, right).
+	numbersep=5pt,                   % Distancia de los números de línea al código
+	numberstyle=\small\color{migris}, % Estilo para los números de línea
+	rulecolor=\color{black},         % Si no se activa, el color del marco puede cambiar en los saltos de línea entre textos que sea de otro color, por ejemplo, los comentarios, que están en verde en este ejemplo
+	%showspaces=true,                % Si se activa, muestra los espacios con guiones bajos; sustituye a 'showstringspaces'
+	showstringspaces=false,          % subraya solamente los espacios que estén en una cadena de esto
+	%showtabs=true,                  % muestra las tabulaciones que existan en cadenas de texto con guión bajo
+	stepnumber=1,                    % Muestra solamente los números de línea que corresponden a cada salto. En este caso: 1,3,5,...
+	stringstyle=\color{mimalva},     % Estilo de las cadenas de texto
+	tabsize=2,	                   % Establece el salto de las tabulaciones a 2 espacios
+	title=\lstname                   % muestra el nombre de los ficheros incluidos al utilizar \lstinputlisting; también se puede utilizar en el parámetro caption
+}
 
 \author{Armando Rivera}
 \title{Machine Learning}
@@ -15,13 +47,14 @@
 
 \begin{document}
 \maketitle
+\spanishdecimal{.}
 \renewcommand{\tablename}{Tabla}
 \renewcommand{\listtablename}{Índice de tablas}
 \tableofcontents
 \listoffigures
 \listoftables
 \chapter*{Acerca de este manual}
-Este manual fue hecho para guiar a las personas que quieren introducirse al mundo del Machine Learning, este manual es una recopilación del material escrito y en video del curso disponible en la plataforma Coursea por la Universidad de Stanford impartido por Andrew Ng a quien se le da el crédito por el material proporcionado. 
+Este manual fue hecho para guiar a las personas hispano hablantes que quieren introducirse al mundo del Machine Learning, este manual es una recopilación del material escrito y en video del curso disponible en la plataforma Coursea por la Universidad de Stanford impartido por Andrew Ng a quien se le da el crédito por el material proporcionado sin el cual este proyecto no hubiera sido posible. 
 \chapter{Introducción}
 El aprendizaje automático es una
 de las nuevas tecnologías más emocionantes. Cada vez que usas un buscador web como Google o Bing para hacer una
@@ -439,7 +472,7 @@ Al trabajar con múltiples características tenemos que tomar en cuenta el rango
 	\label{Eq:Esc}
 \end{equation}
 Donde:\\$x_i$ es la característica que queremos escalar.\\$\mu_i$ es el promedio de los valores de dicha característica.\\
-$s_i$ Es el rango de valores (Valor maximo - Valor mínimo).\\\\Por ejemplo si queremos escalar la característica de número de habitaciones haríamos lo siguiente.
+$s_i$ Es el rango de valores (Valor maximo - Valor mínimo). o también puede ser una derivación estandar\\\\Por ejemplo si queremos escalar la característica de número de habitaciones haríamos lo siguiente.
 \[
 x_2=\frac{\#Habitaciones-2}{5}
 \]
@@ -516,4 +549,198 @@ Las desventajas de la ecuación normal son:
 	\item Es muy lento si \text{n} es muy grande.
 \end{itemize}
 Conviene optar por la ecuación normal cuando $n<10,000$. Cuando queremos resolver un problema por ejemplo de clasificación como regresión logística nos damos cuenta que el algoritmo de la ecuación normal no funciona por lo que tendremos que optar por el gradiente de descenso.
+
+\chapter{Regresión logística}
+\section{Clasificación}
+Usamos algoritmos de clasificación cuando la variable y el valor que queremos predecir tienen valores discretos, el algoritmo que usamos se llama regresión logística que es de los más utilizados.\\Algunos ejemplos donde utilizamos clasificación son:\\Predecir si un correo es spam o no, si tenemos un paciente con un tumos y queremos predecir si este tumor es maligno o benigno. En este último ejemplo si nuestro algoritmo nos devuelve un 0 esto quiere decir que se trata de un tumor benigno, si nos devuelve un 1, se trata de un tumor maligno. Si graficamos estos valores donde el eje x representa el tamaño del tumor y en el eje Y si es 1 o 0, y aplicamos nuestra función de hipótesis para el caso de regresión lineal $h_\theta(x)=\theta^Tx$ diremos que:
+\[
+Si\quad h_\theta(x)\geq 0.5\quad y=1\qquad Si\quad h_\theta(x)<0.5\quad y=0
+\]
+Como se ve en la figura \ref{Fig:RL1} la predicción es buena.
+Sin embargo si agregamos muchos valores puede que nuestra recta no se ajuste perfectamente y nos de muchos errores como se ve en la figura \ref{Fig:RL2}. Otro problema al usar regresión lineal en este caso es que la función de hipótesis nos regresa un valor que en la mayoría de los casos no es un valor 0 o 1 que es lo que nos interesa.\\En conclusión, usar un algoritmo de regresión lineal en un problema de clasificación no es para nada una buena idea y no se debe usar nunca.
+\begin{figure}[h]
+	\begin{subfigure}{0.5\textwidth}
+	\includegraphics[scale=0.5]{img/RL1}
+	\caption{}
+	\label{Fig:RL1}
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[scale=0.3]{img/RL2}
+		\caption{}
+		\label{Fig:RL2}
+	\end{subfigure}
+\caption{Regresión lineal aplicada a un problema de regresión logística}
+\label{Fig:RL}
+\end{figure}
+\section{Representación de la hipótesis}
+Vamos a modificar nuestra función de hipótesis que teníamos en la regresión lineal y la vamos a adaptar para un problema de clasificación. Nuestra función de hipótesis estará dada por:
+\begin{equation}
+	h_\theta(x)=g(\theta^Tx)
+	\label{Eq:Hipclas}
+\end{equation}
+Donde $g(z)$ es:
+\begin{equation}
+	g(z)=\frac{1}{1+e^{-z}}
+	\label{Eq:Sgmoide}
+\end{equation}
+La ecuación \ref{Eq:Sgmoide} recibe el nombre de función sigmoide o función logística. Por lo tanto nuestra función de hipótesis para la regresión logística es:
+\begin{equation}
+	h_\theta(x)=g\Big(\frac{1}{1+e^{(-\theta^Tx)}}\Big)
+	\label{Eq:Hipclasificacion}
+\end{equation}
+Podemos ver en la ecuación \ref{Eq:Hipclasificacion} que:\\ Si $\theta^Tx$ tiende a $\infty$$ h_\theta(x) $ tiende a 1.\\ Si $ \theta^Tx $ tiende a $-\infty$ $ h_\theta(x) $ tiende a 0.\\La función sigmoide se puede ver en la figura \ref{Fig:Sig}. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{img/sigmoide}
+	\caption{Función sigmoide}
+	\label{Fig:Sig}
+\end{figure}
+\subsection{Interpretación del resultado en nuestra hipótesis}
+Si por ejemplo $h_\theta(x)=0.7$ diremos que $ y=1 $ es decir que el paciente tiene el 70\% de probabilidad de que el tumor sea maligno.\\\\La probabilidad de que y=1 se representa así $ h_\theta(x)=P(y=1|x;\theta) $. La probabilidad de que y=1 + la probabilidad de que y=0 debe ser 1.  Por lo tanto diremos que la probabilidad de que y=0 = 1-La probabilidad de que y=1.
+\begin{equation}
+	P(y=0|x;\theta)=1-P(y=1|x;\theta)
+\end{equation} 
+\section{Límite de decisión}
+El límite de decisión es la frontera que separa nuestros datos discretos, por ejemplo si en una gráfica tenemos los datos de tumores malignos y benignos agrupados, podemos trazar una curva que los separe, esta curva recibe el nombre de límite de decisión o Decision boundery.\\Supongamos que tenemos la siguiente función de hipótesis.
+\begin{equation}
+h_\theta(x)=g(\theta_0+\theta_1x_1+\theta_2x_2)
+\label{Eq:HipLogistic}
+\end{equation}
+Donde el vector $ \theta $ esta dado por:
+\[
+\theta=\left[\begin{array}{c}
+-3\\1\\1
+\end{array}\right]
+\]
+ Por lo tanto la función quedará expresada de la siguiente forma. 
+\[
+h_\theta(x)=g(-3+x_1+x_2)
+\]
+
+Ahora nuestra predicción será y=1 si y solo si $ -3+x_1+x_2\geq0 $, entonces tenemos la ecuación $ x_1+x_2=3 $ esta línea sera nuestro límite de decisión, es decir:\[
+y=1\quad Si\quad x_1+x_2\geq3; \qquad  y=0\quad Si\quad x_1+x_2<3
+\]
+La gráfica que muestra lo que hemos analizado se encuentra en la figura \ref{Fig:DB1}
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{img/DB1}
+	\caption{Límite de decisión}
+	\label{Fig:DB1}
+\end{figure}
+Nos podemos encontrar con casos en los que una línea recta no soluciona el problema y no pude ser nuestro límite de decisión. Lo que podemos hacer es ajustar nuestra curva de tal forma que sea un polinomio de grado n. Pongamos como ejemplo los datos que se encuentran graficados en la figura \ref{Fig:DB2}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{img/DB2}
+	\caption{Datos no lineales}
+	\label{Fig:DB2}
+\end{figure}
+Nuestra hipótesis será para este caso:
+\[
+h_\theta(x)=g(\theta_0+\theta_1x_1+\theta_2x_2+\theta_3x_1^2+\theta_4x_2^2)
+\]
+Donde:
+\[
+\theta=\left[\begin{array}{c}
+-1\\0\\0\\1\\1
+\end{array}\right]
+\]
+Por lo tanto nuestra predicción sera y=1 si $ -1+x_1^2+x_2^2\geq0 $ por lo que tenemos:\[
+x_1^2+x_2^2\geq1
+\]
+Que es la ecuación de una circunferencia con centro en el origen y radio 1. Como vemos en la figura esta curva se adapta muy bien a nuestros datos. Modificando los valores del vector $ \theta $ y el grado del polinomio, podemos trazar la curva que mejor se adapte a nuestros datos.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{img/DB3}
+	\caption{Límite de decisión no lineal}
+	\label{Fig:DB3}
+\end{figure}
+\section{Función de costo}
+Hasta ahora hemos visto la definición de un problema de clasificación y hemos dicho que para resolverlo tenemos que hacer uso de la regresión logística pero no hemos visto como escoger el mejor parámetro para $ \theta $. Antes que nada vamos a definir nuestra función de costos que viene dada por la expresión que se muestra en la ecuación \ref{Eq:CostLog}.
+\begin{figure}[h]
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[scale=0.5]{img/logy1}
+		\caption{$h_\theta(X)$ dado que y=1}
+		\label{Fig:logy1}
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[scale=0.5]{img/logy2.pdf}
+		\caption{$h_\theta(X)$ dado que y=0}
+		\label{Fig:logy0}
+	\end{subfigure}
+	\caption{Gráficas de la función de costo para regresión logística}
+\end{figure}
+\begin{equation}
+Cost(h_\theta(x),y)=\Big\{
+	\begin{array}{c}
+	-log(h_\theta(x))\quad si\quad y=1
+	\\-log(1-h\theta(x))\quad si\quad y=0
+	\end{array}
+	\label{Eq:CostLog}
+\end{equation}
+La gráfica que muestra el comportamiento para la función de costo si y=1 se muestra en la figura \ref{Fig:logy1}. Como podemos ver si y=1 y nuestra función de hipótesis nos dice que y=0 (Predicción errónea), se penaliza el algoritmo con un costo muy alto. Nótese que si nuestro algoritmo predice y=0 (Predicción correcta) el error se minimiza. Para este caso:\[
+Costo \Rightarrow \infty\quad Si\quad h_\theta(x)\Rightarrow0
+\]
+Ahora para el caso en el que y=0 sucede algo similar como se puede observar en la figura \ref{Fig:logy0}. 
+Para este caso:\[
+Costo \Rightarrow \infty\quad Si\quad h_\theta(x)\Rightarrow1
+\]
+Podemos simplificar la ecuación \ref{Eq:CostLog} como se muestra a continuación.
+\begin{equation}
+	Cost(h_\theta(x),y)=-ylog(h_\theta(x))-(1-y)log(1-h_\theta(x))
+	\label{Eq:CostClas}
+\end{equation}
+Ahora ya podemos definir una función de costos definitiva con la que estaremos trabajando a lo largo del curso y la más utilizada para problemas de clasificación, dicha expresión se muestra en la ecuación \ref{Eq:CostFuncLogReg}.
+\begin{align}
+	J(\theta)&=\frac{1}{m}\sum_{i=1}^{m}Cost(h_\theta(x^{(i)}),y^{(i)})\notag\\
+	J(\theta)&=-\frac{1}{m}\Bigg[\sum_{i=1}^{m}y^{(i)}log(h_\theta(x^{(i)}))+(1-y^{(i)})log(1-h_\theta(x^{(i)}))\Bigg]\label{Eq:CostFuncLogReg}
+\end{align}
+Podemos implementarla de forma vectorial como se expresa en la ecuación \ref{Eq:CostFuncVect}.
+\begin{align}
+h&=g(X\theta)\\\notag
+J(\theta)&=\frac{1}{m}(-y^Tlog(h)-(1-y)^Tlog(1-h)\label{Eq:CostFuncVect}
+\end{align}
+\section{Descenso de gradiente}
+En esta sección nos ocuparemos de encontrar el parámetro $ \theta $ que minimiza la función $ J(\theta) $. El algoritmo que se usará es muy similar al que usamos en la regresión lineal y es el siguiente.
+\begin{equation}
+	\theta_j:=\theta_j-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\theta((x^{(i)})-y^{(i)})x_j^{(i)})
+	\label{Eq:thetAlgoLogReg}
+\end{equation}
+Repetiremos el algoritmo que se expresa en la ecuación \ref{Eq:thetAlgoLogReg} hasta que converga, es decir, hasta que encontremos un valor tal que $ J(\theta) $ sea mínimo.\\Como podemos ver este algoritmo es muy parecido al que ocupamos en la regresión lineal con la excepción de que en este caso $ h_\theta(x) $ es la función sigmoide (Ecuación \ref{Eq:Hipclasificacion}).\\Podemos implementarla en forma vectorial como se muestra en la ecuación \ref{Eq:thetAlgoVect}.
+\begin{equation}
+	\theta:=\theta-\alpha\frac{1}{m}X^T(g(X\theta)-\bar{y})
+	\label{Eq:thetAlgoVect}
+\end{equation}
+\newpage
+\section{Algoritmos avanzados de optimización}
+Hasta ahora el único algoritmo de optimización era el que se muestra en la ecuación \ref{Eq:thetAlgoLogReg} que es el algoritmo de descenso de gradiente, pero también existen otros como lo son:
+\begin{itemize}
+	\item Gradiente conjugado BFGS
+	\item Gradiente conjugado L-BFGS
+\end{itemize}
+Estos algoritmos son más avanzados y requieren de cálculo numérico avanzado para obtener las derivadas, una de las ventajas de estos algoritmos es que no necesitas una tasa de aprendizaje $ \alpha $ porque emplea un algoritmo de búsqueda lineal que automáticamente prueba distintos valores para $ \alpha $ de forma que incluso se puede seleccionar una tasa de aprendizaje diferente para cada iteración.\\Estos algoritmos generalmente terminan convergiendo más rápido que el gradiente de descenso. Debido a su complejidad, no es conveniente programar por nosotros mismos estos algoritmos sino usar bibliotecas que alguien más ya programó.\\Lo primero que tenemos que hacer es definir las funciones $ J(\theta) $ y $ \frac{\partial}{\partial\theta_j}J(\theta) $. Lo podemos hacer escribiendo una función que regrese estos dos valores.
+\begin{lstlisting}[frame=single]
+function [jVal, gradient] = costFunction(theta)
+jVal = [...code to compute J(theta)...];
+gradient = [...code to compute derivative of J(theta)...];
+end
+\end{lstlisting}
+Ahora tenemos que usar la función $ fminunc() $ que optimiza el algoritmo usando la función $ optimset() $, este código se puede implementar de la siguiente forma.
+\begin{lstlisting}[frame=single,numbers=none]
+options = optimset('GradObj', 'on', 'MaxIter', 100);
+initialTheta = zeros(2,1);
+[optTheta, functionVal, exitFlag] = fminunc(@costFunction,...
+initialTheta, options);
+\end{lstlisting}
+Entonces le damos pasamos a la función $ fminunc() $, la función de costo, un vector inicial de los valores de theta, y las opciones, éste último es el vector que ya hemos creado.
+\section{Clasificación multiclase}
+Hemos estudiado el caso en el que la variable $ y $ puede tomar dos valores, esto es $ y\in{0,1} $, pero que pasa si queremos clasificar más de dos valores, como ya vimos un problema de clasificación involucra valores discretos, esto nos dice que no sólo pueden ser dos valores, como hemos visto hasta ahora.\\Si tenemos un problema en el cual $ y\in{0,1,\dots,n} $, lo que debemos hacer es dividir nuestro problema en $ n+1 $ problemas de clasificación, en cada uno de estos sub-problemas y predecimos la probabilidad de que ocurra $ y $. Esto es:
+\begin{align*}
+	y\in{0,1,\dots,n}\\
+	h_\theta^{(0)}(x)=&P(y=0|x;\theta)\\
+	h_\theta^{(1)}(x)=&P(y=1|x;\theta)\\
+	\dots\\
+	h_\theta^{(n)}(x)=&P(y=n|x;\theta)\\
+	prediccion=&max(h_\theta^{(i)}(x))	
+\end{align*}
+Lo que haremos será obtener las probabilidades de cada caso y diremos que nuestra predicción será el valor de $ y $ para el cual la probabilidad $ h_\theta^{(i)}(x) $ es máxima.
 \end{document}
