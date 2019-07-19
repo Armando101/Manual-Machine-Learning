@@ -9,50 +9,20 @@
 \usepackage{wrapfig}
 \usepackage{vmargin}
 \usepackage{listings}
-\lstset{language=Matlab}
+\usepackage{fancyhdr}
 
-\usepackage{color}
+\include{preambulo}
 
-\definecolor{miverde}{rgb}{0,0.6,0}
-\definecolor{migris}{rgb}{0.5,0.5,0.5}
-\definecolor{mimalva}{rgb}{0.58,0,0.82}
-
-\lstset{ %
-	backgroundcolor=\color{white},   % Indica el color de fondo; necesita que se añada \usepackage{color} o \usepackage{xcolor}
-	captionpos=b,                    % Establece la posición de la leyenda del cuadro de código
-	commentstyle=\color{miverde},    % Estilo de los comentarios
-	escapeinside={\%*}{*)},          % Si quieres incorporar LaTeX dentro del propio código
-	extendedchars=true,              % Permite utilizar caracteres extendidos no-ASCII; solo funciona para codificaciones de 8-bits; para UTF-8 no funciona. En xelatex necesita estar a true para que funcione.
-	frame=single,	                   % Añade un marco al código
-	%keepspaces=true,                 % Mantiene los espacios en el texto. Es útil para mantener la indentación del código(puede necesitar columns=flexible).
-	keywordstyle=\color{blue},       % estilo de las palabras clave
-	language=Matlab,                 % El lenguaje del código
-	otherkeywords={*,...},           % Si se quieren añadir otras palabras clave al lenguaje
-	numbers=left,                    % Posición de los números de línea (none, left, right).
-	numbersep=5pt,                   % Distancia de los números de línea al código
-	numberstyle=\small\color{migris}, % Estilo para los números de línea
-	rulecolor=\color{black},         % Si no se activa, el color del marco puede cambiar en los saltos de línea entre textos que sea de otro color, por ejemplo, los comentarios, que están en verde en este ejemplo
-	%showspaces=true,                % Si se activa, muestra los espacios con guiones bajos; sustituye a 'showstringspaces'
-	showstringspaces=false,          % subraya solamente los espacios que estén en una cadena de esto
-	%showtabs=true,                  % muestra las tabulaciones que existan en cadenas de texto con guión bajo
-	stepnumber=1,                    % Muestra solamente los números de línea que corresponden a cada salto. En este caso: 1,3,5,...
-	stringstyle=\color{mimalva},     % Estilo de las cadenas de texto
-	tabsize=2,	                   % Establece el salto de las tabulaciones a 2 espacios
-	title=\lstname                   % muestra el nombre de los ficheros incluidos al utilizar \lstinputlisting; también se puede utilizar en el parámetro caption
-}
-
-\author{Armando Rivera}
-\title{Machine Learning}
-%\setpapersize{A4}
 
 \begin{document}
-\maketitle
-\spanishdecimal{.}
+\include{portada}
+
 \renewcommand{\tablename}{Tabla}
 \renewcommand{\listtablename}{Índice de tablas}
 \tableofcontents
 \listoffigures
 \listoftables
+
 \chapter*{Acerca de este manual}
 Este manual fue hecho para guiar a las personas hispano hablantes que quieren introducirse al mundo del Machine Learning, este manual es una recopilación del material escrito y en video del curso disponible en la plataforma Coursea por la Universidad de Stanford impartido por Andrew Ng a quien se le da el crédito por el material proporcionado sin el cual este proyecto no hubiera sido posible. 
 \chapter{Introducción}
@@ -213,7 +183,7 @@ están más o menos donde indica el punto color magenta. Con un conjunto de dato
 algoritmo de aprendizaje es trazar la línea recta en los datos para tratar de separar los
 tumores malignos de los benignos y entonces el algoritmo de aprendizaje puede decidir
 trazar la línea recta para separar las dos clases de tumores.
-Y con esto, es posible que puedas decidir que es más probable.\\\\En este ejemplo, tuvimos dos características,
+Y con esto, es posible que puedas decidir que es más probable.\\\\En este ejemplo, tuvimos dos variables,
 la edad del paciente y el tamaño del tumor. En otros problemas de aprendizaje automático
 con frecuencia tendremos más características como el grosor de acúmulo del
 tumor mamario, uniformidad del tamaño celular del tumor, uniformidad de la forma celular del
@@ -394,8 +364,8 @@ Ahora lo que hacemos es sustituir las ecuaciones \ref{Eq:AI1} y \ref{Eq:AI2} en 
 La función de costos para la regresión lineal siempre será convexa y en forma de arco tal y como se ve en la figura \ref{Fig:CFRL}.\\
 Cuando obtenemos el mínimo de la función siempre será un mínimo global ya que es el único punto más bajo que tiene, a diferencia de la función que se muestra en la figura \ref{Fig:GD1} que también poseé mínimos locales.\\Entonces si encontramos los valores $\theta_0$ y $\theta_1$ del punto más bajo de la función $j(\theta_0, \theta_1)$ y sustituimos dichos valores en la función de hipótesis diremos que dicha función puede predecir un valor con una exactitud aceptable. 
 \chapter{Regresión lineal con múltiples variables}
-\section{Múltiples características}
-Hasta este punto habíamos puesto como ejemplo predecir el precio de una casa dado su tamaño, que pasaría si queremos predecir el precio de una casa pero no sólo tenemos su tamaño como característica si también contamos con otras como el numero de habitaciones, pisos, años que tiene la casa de ser construida, etc. Dichas características se encuentran en la tabla \ref{Tab:Multi}.
+\section{Múltiples variables}
+Hasta este punto habíamos puesto como ejemplo predecir el precio de una casa dado su tamaño, que pasaría si queremos predecir el precio de una casa pero no sólo tenemos su tamaño como variable si también contamos con otras como el numero de habitaciones, pisos, años que tiene la casa de ser construida, etc. Dichas variables se encuentran en la tabla \ref{Tab:Multi}.
 \begin{table}[h]
 		\begin{tabular}{|c|c|c|c||c|}
 			\hline
@@ -409,21 +379,21 @@ Hasta este punto habíamos puesto como ejemplo predecir el precio de una casa da
 			\dots&\dots&\dots&\dots&\dots\\		
 			\hline	
 		\end{tabular}
-	\caption{Múltiples características}
+	\caption{Múltiples variables}
 	\label{Tab:Multi}
 \end{table}
 \\Ahora vamos a hablar sobre la notación que usaremos. El tamaño sera nuestra variable $x_1$ el número de habitaciones será $x_2$ y así sucesivamente, el valor del precio será nuestra variable $y$.\\\\
-\textbf{\textit{$n$}}: Número de características.\\
-\textbf{\textit{$x^{i}$}}: Características del $i$-ésimo dato de entrenamiento (Filas).\\
-\textbf{\textit{$x^{i}_j$}}: Valor de la característica $j$ en el $i$-ésimo dato de entrenamiento.\\\\
-En el ejemplo mostrado en la tabla $n=4$ ya que tenemos 4 características, $m=4$ ya que tenemos 4 datos de entrenamiento. El valor que corresponde a $ x_3^{(2)}=2$ y $x^{(2)}$ se representa como una matriz de $4X1$ cuyos valores son 1416, 3, 2, 40.
+\textbf{\textit{$n$}}: Número de variables.\\
+\textbf{\textit{$x^{i}$}}: variables del $i$-ésimo dato de entrenamiento (Filas).\\
+\textbf{\textit{$x^{i}_j$}}: Valor de la variable $j$ en el $i$-ésimo dato de entrenamiento.\\\\
+En el ejemplo mostrado en la tabla $n=4$ ya que tenemos 4 variables, $m=4$ ya que tenemos 4 datos de entrenamiento. El valor que corresponde a $ x_3^{(2)}=2$ y $x^{(2)}$ se representa como una matriz de $4X1$ cuyos valores son 1416, 3, 2, 40.
 \[x^{(2)}=\left[
 \begin{array}{c}
 	1416\\3\\2\\40
 \end{array}
 \right]
 \]
-Al trabajar con mas características tenemos que cambiar nuestra función de hipótesis como se muestra en la ecuación \ref{Eq:Hip2}.
+Al trabajar con mas variables tenemos que cambiar nuestra función de hipótesis como se muestra en la ecuación \ref{Eq:Hip2}.
 \begin{equation}
 	h_\theta(x)=\theta_0+\theta_1x_1+\theta_2x_2+\dots+\theta_nx_n
 	\label{Eq:Hip2}
@@ -465,7 +435,7 @@ Visto de otra forma nuestro algoritmo para múltiples variables queda resumido e
 \theta_j:=\theta_j-\alpha\frac{1}{m}\sum_{i=0}^{m}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)} \qquad Para\quad j:=0\dots n
 \label{Eq:AI3-Resumido}
 \end{equation}
-\section{Escalamiento de características}
+\section{Escalamiento de variables}
 Al trabajar con múltiples características tenemos que tomar en cuenta el rango de valores que estas toman, por ejemplo tenemos una característica que es el tamaño de la casa cuyos valores oscilan entre 0-2000 y tenemos otra característica que es el número de habitaciones cuyos valores oscilan entre 1-5.\\\\Al ejecutar el gradiente de descenso puede oscilar dando pasos muy grandes o muy pequeños, este comportamiento se sale de nuestro control y puede que el valor nunca converga.\\Lo que hacemos para evitar esto es escalar los valores de nuestras características, es decir que todas tomen un rango similar idealmente entre $-1\underline{<} x_i \underline{<}1$ es aceptable un rango un poco más grande o más pequeño. \\\\Por ejemplo que los rangos de valores de nuestras características se encuentren en $0\underline{<}x_1\underline{<}3$ o $-2\underline{<}x_2\underline{<}0.5$, lo que no está permitido es tomar rangos muy grandes o muy pequeños como $-100\underline{<}x_3\underline{<}100$ o $-0.0001\underline{<}x_4\underline{<}0.0001$.\\La ecuación que usaremos para hacer este escalamiento se muestra en la ecuación \ref{Eq:Esc}.
 \begin{equation}
 	x_i:=\frac{x_i-\mu_i}{s_i}
@@ -686,7 +656,7 @@ Costo \Rightarrow \infty\quad Si\quad h_\theta(x)\Rightarrow1
 \]
 Podemos simplificar la ecuación \ref{Eq:CostLog} como se muestra a continuación.
 \begin{equation}
-	Cost(h_\theta(x),y)=-ylog(h_\theta(x))-(1-y)log(1-h_\theta(x))
+	Cost(h_\theta(x),y)=-y(h_\theta(x))-(1-y)log(1-h_\theta(x))
 	\label{Eq:CostClas}
 \end{equation}
 Ahora ya podemos definir una función de costos definitiva con la que estaremos trabajando a lo largo del curso y la más utilizada para problemas de clasificación, dicha expresión se muestra en la ecuación \ref{Eq:CostFuncLogReg}.
@@ -743,4 +713,100 @@ Hemos estudiado el caso en el que la variable $ y $ puede tomar dos valores, est
 	prediccion=&max(h_\theta^{(i)}(x))	
 \end{align*}
 Lo que haremos será obtener las probabilidades de cada caso y diremos que nuestra predicción será el valor de $ y $ para el cual la probabilidad $ h_\theta^{(i)}(x) $ es máxima.
+\chapter{Regularización}
+\section{Sobre Ajuste (Overfitting)}
+	El sobre ajuste es un problema de machine learning que se presenta cuando nuestra predicción se ajusta exactamente a nuestros datos, esto podría parecer bueno, sin embargo es un gran problema ya que para datos con los que entrenamos el algoritmo, éste funciona muy bien y para datos nuevos que nuestro algoritmo nunca antes ha visto, funciona muy mal, podríamos decir que nuestro algoritmo memorizó los datos con los que lo estábamos entrenando, pero no aprendió nada de ciertos datos, por lo tanto al querer obtener una predicción, ésta no se acerca nada al valor real.\\\\El \textit{Underfitting} es otro problema, éste ocurre cuando nuestro algoritmo no se ajusta ni a los datos dados ni a nuevos datos. Podemos hacer una analogía con tres tipos de estudiantes: El estudiante \textbf{A} es aquel que se presenta a un examen sin estudiar nada, el estudiante \textbf{B} es aquel que se presenta a un examen para el cual estudió, por último tenemos al estudiante \textbf{C} el cual consiguió las preguntas que vendrían en el examen y memorizó las respuestas. El estudiante \textbf{A} es un ejemplo de \textit{Underfitting} podrá responder el examen pero lo hará sin acertar ninguna respuesta. El estudiante \textbf{C} es un ejemplo de \textit{Overfitting}, obtendrá la calificación más alta en el examen, sin embargo cuando tenga que resolver problemas parecidos pero no exactos a los del examen, no podrá resolverlos, ni siquiera acercarse un poco al resultado correcto. Por último el estudiante \textbf{B} es un ejemplo del ajuste que queremos conseguir, es el que más nos conviene, el estudiante tal vez no obtenga la calificación más alta como el estudiante \textbf{C} pero cuando se enfrente a problemas similares a los del examen podrá enfrentarlos obteniendo resultados que se acercan mucho al valor deseado.\\\\\textbf{Overfitting}: Si tenemos muchas variables, la hipótesis puede ajustarse correctamente a nuestro training set pero fallará con nuevos datos, esto se puede ver en la ecuación \ref{eq:Hip}. Si $ m\rightarrow\infty $, $ J(\theta)\rightarrow0 $. En la figura \ref{Fig:overLR} se muestra un ejemplo gráfico para el caso de la regresión lineal y en la figura \ref{Fig:overLogR} se muestra el ejemplo para el caso de regresión logística.
+	\begin{equation}
+	J(\theta)=\frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^i-y^i)^2
+	\label{eq:Hip}
+	\end{equation} 
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.6]{img/overLR}
+		\caption{Regresión Lineal}
+		\label{Fig:overLR}
+	\end{figure}
+		\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{img/overLogR}
+		\caption{Regresión Logística}
+		\label{Fig:overLogR}
+	\end{figure}
+\subsection{Evitar el overfitting}
+El overfitting ocurre principalmente cuando tenemos pocos datos de entrenamiento y muchas variables, en este caso podemos recurrir a dos opciones:
+\begin{enumerate}
+	\item Reducir el número de variables.
+	\begin{itemize}
+		\item Selección manual de cuales variables mantener. En este caso debemos revisar cuales son las más importantes y eliminar las demás.
+		\item Selección por medio de un algoritmo (Se tratará en capítulos posteriores).
+	\end{itemize}
+	\item Regularización
+	\begin{itemize}
+		\item Mantener las variables pero reducir la magnitud de los parámetros $ \theta_j $
+		\item La regularización funciona bien cuando tenemos muchas variables útiles.
+	\end{itemize}
+\end{enumerate}
+\section{Función de costo}
+En esta sección lo que buscamos es encontrar una forma de la función de costos que vamos a utilizar al momento de implementar la regularización. Imaginemos que tenemos cuatro variables para el problema de el precio de una casa, con cuatro variables nuestra función será un polinomio de grado 4 y se verá más parecida al tercer recuadro de la figura \ref{Fig:overLR} que al segundo, entonces lo que buscamos es obtener un polinomio de grado 2, en la ecuación \ref{eq:ejem} podemos ver un ejemplo de nuestra función de costos con las variables 3 y 4.
+\begin{equation}
+	J(\theta)=\frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^i)-y^i)^2+1000\ \theta_3^2+1000\ \theta_4^2
+	\label{eq:ejem}
+\end{equation}
+El número $ 1000 $ se puso para simbolizar que la variables $ x^3 $ y $ x^4 $ respectivamente, pueden ocupan números muy grandes, vemos que la única forma de que la función de costos sea pequeña es que tanto los parámetros $ \theta_3 $ y $ \theta_4 $ se aproximen a 0. \\Cuando tenemos muchas variables, por ejemplo 100 y no sabemos cuál eliminar, podemos conservar todas modificando la función de costos de tal manera que cada parámetro $ \theta_j^2 $ lo reduzcamos a un valor pequeño, la función de costos quedará como en la ecuación \ref{Eq:CostReg}.
+\begin{equation}
+	J(\theta)=\frac{1}{2m}\sum_{i=1}^{m}h_\theta(x^i-y^i)^2+\lambda\sum_{j=1}^{n}\theta_j^2
+	\label{Eq:CostReg}
+\end{equation}
+Donde \textbf{$ \lambda $} es el parámetro de regularización. Si elegimos $ \lambda $ muy pequeño en la hipótesis se eliminarán todos los parámetros $ \theta $ a excepción de $ \theta_0 $ de tal forma que obtendremos una línea recta $ h_\theta(x) =\theta_0$.
+\[
+ h_\theta(x) =\theta_0 + \theta_1x +\theta_2x^2+\theta_3x^3+\theta_4x^4
+\]
+Por otro lado si $ \lambda $ es muy grande, tenemos el caso de \textit{underfitting}.
+
+\section{Regresión lineal regularizada}
+Como se trató en capítulos anteriores, usamos un algoritmo iterativo para encontrar los valores $ \theta_j $ que mejor se ajustan a nuestra hipótesis, este algoritmo es el del \texttt{gradiente de descenso}, tomando en cuenta la taza de aprendizaje $ \alpha $ y el parámetro de regularización $ \lambda $, nuestro algoritmo queda definido como se ve en la ecuación \ref{eq:GDReg}. El parámetro $ \lambda $ no lo ocuparemos en $ \theta_0 $.
+\begin{align}\notag
+	\theta_j:=&\theta_j-\alpha\Bigg[\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^i)-y^i)x_j^i+\frac{\lambda}{m}\theta_j\Bigg]\\
+	\theta_j:=&\theta_j(1-\alpha\frac{\lambda}{m})-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^i)-y^i)x_j^i\qquad j\in\{1,2,\dots,n\}
+	\label{eq:GDReg}\\
+	\theta_0:=&\theta_0-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^i)-y^i)x_0^i
+\end{align}
+El segundo algoritmo que vimos para ajustar un problema de regresión lineal fue el de la \texttt{ecuación normal} en el cual creamos una matriz $ \mathbf{X} $ y un vector \textbf{y}. La ecuación normal queda como se muestra en la ecuación \ref{eq:NEReg}, cabe destacar que la dimensión de la matriz que acompaña al parámetro $ \lambda $ es de (n+1)*(n+1). 
+
+\begin{equation}
+	\theta = \left(X^TX\lambda
+	\begin{bmatrix}
+		0&&&&\\
+		&1&&&\\
+		&&1&&\\
+		&&&\ddots&\\
+		&&&&1
+	\end{bmatrix}
+	\right)^{-1}X^Ty
+	\label{eq:NEReg}
+\end{equation}
+La función de costo queda definida como
+\[
+	J(\theta)=\frac{1}{2m}\sum_{i=1}^{m}h_\theta(x^i-y^i)^2+\lambda\sum_{j=1}^{n}\theta_j^2
+\]
+\section{Regresión logística regularizada}
+El proceso de regularización para la regresión logística, es similar al de regresión lineal quedando de la siguiente manera.
+\begin{align*}
+\theta_0:=&\theta_j-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^i)-y^i)x_0^i\\
+\theta_j:=&\theta_j-\alpha\Bigg[\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^i)-y^i)x_j^i+\frac{\lambda}{m}\theta_j\Bigg]
+\end{align*}
+Al ver las similitudes entre las ecuaciones para la regresión logística y para la regresión lineal podemos pensar que se trata de exactamente lo mismo, sin embargo no es así ya que para la regresión logística la función de hipótesis es diferente, como recordaremos:
+\[
+h_\theta(x)=\frac{1}{1+e^{-\theta^Tx}}
+\]La función de costo queda definida como:
+\[
+J(\theta)=-\frac{1}{m}\Bigg[\sum_{i=1}^{m}y^{(i)}log(h_\theta(x^{(i)}))+(1-y^{(i)})log(1-h_\theta(x^{(i)}))\Bigg]+\frac{\lambda}{2m}\sum_{j=1}^{n}\theta^2_j
+\]
+Podemos usar algoritmos avanzados de optimización
+\begin{lstlisting}[frame=single]
+function [jVal, gradient] = costFunction(theta)
+jVal = [...code to compute J(theta)...];
+gradient = [...code to compute derivative of J(theta)...];
+end
+\end{lstlisting}
 \end{document}
