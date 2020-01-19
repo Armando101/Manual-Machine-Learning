@@ -10,9 +10,14 @@
 \usepackage{vmargin}
 \usepackage{listings}
 \usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{multicol}
+
+\RequirePackage[hidelinks, colorlinks=true,linkcolor=black,urlcolor=blue]{hyperref}
 
 \include{preambulo}
 
+\spanishdecimal{.}
 
 \begin{document}
 \include{portada}
@@ -24,7 +29,7 @@
 \listoftables
 
 \chapter*{Acerca de este manual}
-Este manual fue hecho para guiar a las personas hispano hablantes que quieren introducirse al mundo del Machine Learning, este manual es una recopilación del material escrito y en video del curso disponible en la plataforma Coursea por la Universidad de Stanford impartido por Andrew Ng a quien se le da el crédito por el material proporcionado sin el cual este proyecto no hubiera sido posible. 
+Este manual fue hecho para guiar a las personas hispano hablantes que quieren introducirse al mundo del Machine Learning, este manual es una recopilación del material escrito y en video del curso disponible en la plataforma Coursea por la Universidad de Stanford impartido por Andrew Ng a quien se le da el crédito por el material proporcionado sin el cual este proyecto no hubiera sido posible. \href{https://www.coursera.org/learn/machine-learning/home/welcome}{Curso de Machine learning}
 \chapter{Introducción}
 El aprendizaje automático es una
 de las nuevas tecnologías más emocionantes. Cada vez que usas un buscador web como Google o Bing para hacer una
@@ -130,7 +135,6 @@ de forma continua.\\\\
 	\caption{Ejemplo de aprendizaje supervisado}
 	\label{fig:Ej1}
 \end{figure}
-
 Digamos que quieres revisar
 expediente médicos y tratar de predecir cáncer de mama como maligno o benigno. \\Un tumor maligno es un
 tumor dañino y peligroso y un tumor benigno es un tumor inofensivo.
@@ -541,7 +545,49 @@ Sin embargo si agregamos muchos valores puede que nuestra recta no se ajuste per
 	\end{subfigure}
 \caption{Regresión lineal aplicada a un problema de regresión logística}
 \label{Fig:RL}
-\end{figure}
+\end{figure}	Odd a Favor de que gane un equipo son 1 a 4\\
+0\textbf{0000} $ \frac{0}{0000}=\frac{1}{4} $\\
+
+odd a Favor de que gane un equipo son 5 a 3\\
+$ 00000\textbf{000} \frac{00000}{000}=\frac{5}{3}$\\
+odd $ \neq $ Probabilidad\\
+odd es la razón de que algo sucede a algo que no suceda.\\
+Probabilidad: razón de que algo ocurra entre todas las posibilidades.\\
+
+Odds a favor de que gane mi equipo el partido son 5 a 3 $ \frac{5}{3} $\\
+
+La probabilidad de que gane mi equipo $ \frac{5}{8} $\\
+
+La probabilidad de que pierda mi equipo es:\\ $ \frac{3}{8}= 1 - P(Ganar) = 1-\frac{5}{8} = \frac{8}{8} - \frac{5}{8} = \frac{3}{8} $
+
+P(Perder) = 1-P(Ganar)
+
+Ahora hallemos la razón de la probabilidad de ganar respecto a la de perder.\\\[
+\frac{P(Ganar)}{P(Perder)} = \frac{P(Ganar)}{1-P(Ganar)} = \frac{\frac{5}{8}}{\frac{3}{8}}=\frac{5}{3} = odd\qquad Ganar
+\]
+\[
+\frac{P}{1-P}=odd
+\]
+
+odd de ganar:\\
+\begin{align*}
+\frac{0}{0000}&=\frac{1}{4}=0.25\\
+1 \quad a\quad 8 \qquad\frac{1}{8}&=0.125\\
+1 \quad a\quad 16 \qquad\frac{1}{16}&=0.062\\
+1 \quad a\quad 32 \qquad\frac{1}{32}&=0.031
+\end{align*}
+Si los odd están en contra de mi equipo, odd $ \in $ [0,1)
+\[
+\frac{0000}{000} = \frac{4}{3}=1.3
+\]
+\[
+\frac{00000000}{000} = \frac{8}{3} = 2.7\\
+\]
+Si los odd están a favor de mi equipo, odd $ \in (1, \infty) $\\
+
+Esta asimetría  dificulta la comparación de odd a favor o en contra de mi equipo.\\
+
+La distancia de 1 a 5 es la misma que de 5 a 1.
 \section{Representación de la hipótesis}
 Vamos a modificar nuestra función de hipótesis que teníamos en la regresión lineal y la vamos a adaptar para un problema de clasificación. Nuestra función de hipótesis estará dada por:
 \begin{equation}
@@ -565,11 +611,80 @@ Podemos ver en la ecuación \ref{Eq:Hipclasificacion} que:\\ Si $\theta^Tx$ tien
 	\caption{Función sigmoide}
 	\label{Fig:Sig}
 \end{figure}
+Suponemos que logit bajo una probabilidad p es una función lineal:
+\begin{align*}
+logit(P(x)) &= X\theta^T\\
+\ln\Bigg(\frac{P(x)}{1-P(x)}\Bigg) &=X\theta^T\\
+\frac{P(x)}{1-P(x)}&=e^{x\theta^T}
+\end{align*}
+
+\[
+x=[1, X_1, x_2, \dots x_m]\qquad \theta=[\theta_0, \theta_1, \theta_2, \dots, \theta_m]
+\]
+\begin{align*}
+P&=(1-P(x))e^{x\theta^T}\\
+P(x) + P(x)e^{x\theta^T}&=e^{x\theta^T}\\
+P(x)(1+e^{x\theta^T})&=e^{x\theta^T}\\
+P(x)&=\frac{e^{x\theta^T}}{1+e^{x\theta^T}}\\
+&=\frac{e^{-x\theta^T}}{e^{-x\theta^T}}\\
+&=\frac{e^0}{e^{-x\theta^T}+e^0}\\
+&=\frac{1}{e^{-x\theta^T}+1}
+\end{align*}
+\begin{center}
+	\begin{tcolorbox}[
+		colframe = gray, 
+		arc = 3mm, 
+		width = 0.4\textwidth,
+		height = 40pt		
+		]
+		\[
+		P(x)=\frac{1}{e^{-x\theta^T+1}}
+		\]
+	\end{tcolorbox}
+\end{center}
+\begin{align*}
+\sigma :&\mathbb{R}\\
+\sigma(x):&=\frac{1}{e^{-x}+1}\\\\
+\lim_{x\rightarrow\infty}\sigma(x)&=1\\
+\lim_{x\rightarrow-\infty}\sigma(x)&=0
+\end{align*}
+Al graficar la función sigmoide tenemos dos asintotas horizontales:
+\begin{align*}
+y&=1\\
+y&=0
+\end{align*}
+\[
+\frac{\partial}{\partial x}\sigma(x)=\frac{\partial}{\partial x}\frac{1}{1+e^{-x}} = \frac{(1+e^{-x})(0) - (1)(-e^{-x})}{(1+e^{-x})^2} = \frac{e^{-x} + 1 - 1}{(1+e^{-x})^2}-\frac{1}{(1+e^{-x})^2}
+\]
+\[
+\sigma^2(x)=\frac{1}{1+e^{-x}}-\frac{1}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}(1-\frac{1}{1+e^{-x}}) = \sigma(x)(1-\sigma(x))
+\]
+\[
+\sigma^2(x)= \sigma(x)(1-\sigma(x))
+\]
 \subsection{Interpretación del resultado en nuestra hipótesis}
 Si por ejemplo $h_\theta(x)=0.7$ diremos que $ y=1 $ es decir que el paciente tiene el 70\% de probabilidad de que el tumor sea maligno.\\\\La probabilidad de que y=1 se representa así $ h_\theta(x)=P(y=1|x;\theta) $. La probabilidad de que y=1 + la probabilidad de que y=0 debe ser 1.  Por lo tanto diremos que la probabilidad de que y=0 = 1-La probabilidad de que y=1.
 \begin{equation}
 	P(y=0|x;\theta)=1-P(y=1|x;\theta)
 \end{equation} 
+\begin{align*}
+h_\theta(x) &= y(x\theta^T)=\frac{1}{1+e^{-x\theta^T}} \in (0,1)\\
+P&(y=0|x;\theta)+P(y=1|x;\theta)=1\\
+P&(y=0|x;\theta)=1-P(y=1|x;\theta) = 1-h_\theta(x)
+\end{align*}
+\textbf{Predecir}:
+\[
+Si\quad h_\theta(x)\geq 0.5\quad y=1\qquad Si\quad h_\theta(x)<0.5\quad y=0
+\]
+Para todas las muestras etiquetadas con 1. Quiero $ \theta $ de tal manera que $ h_\theta(x) $ sea lo más cercano a 1.\\\\
+Para todas las muestras etiquetadas con 0. Quiero $ \theta $ de tal manera que $ h_\theta(x) $ sea lo más cercano a 0.\\\\
+Suponemos que todas las muestras son independientes 1
+\begin{align*}
+L(\theta)&=\prod_{i=1}^{m}h_\theta(x^{(i)})^{y^{(i)}}(1-h_\theta(x^{(i)}))^{-y^{(i)}}\\
+J(\theta)&=-\sum_{i=1}^{m}y(i)\ln(h_\theta(x^{(i)}))+(1-y^{(i)})\ln(1-h_\theta(x^(i)))\\
+J(\theta)&=+\sum_{i=1}^{m}-y^{(i)}\ln(h_\theta(x^{(i)}))-(1-y^{(i)})\ln(1-h_\theta(x^{(i)}))\qquad(0, \infty)\\
+J(\theta)&=\sum_{i=1}^{m}+L(h_\theta(x^{(i)}), y^{(i)})
+\end{align*}
 \section{Límite de decisión}
 El límite de decisión es la frontera que separa nuestros datos discretos, por ejemplo si en una gráfica tenemos los datos de tumores malignos y benignos agrupados, podemos trazar una curva que los separe, esta curva recibe el nombre de límite de decisión o Decision boundery.\\Supongamos que tenemos la siguiente función de hipótesis.
 \begin{equation}
@@ -669,6 +784,34 @@ Podemos implementarla de forma vectorial como se expresa en la ecuación \ref{Eq
 h&=g(X\theta)\\\notag
 J(\theta)&=\frac{1}{m}(-y^Tlog(h)-(1-y)^Tlog(1-h)\label{Eq:CostFuncVect}
 \end{align}
+\begin{align*}
+J(\theta) &= \sum_{i=1}^{m}-y^{(i)}\ln(h_\theta(x^{(i)})) - (1-y^{(i)}) \ln(-h_\theta(x^{(i)}))\\
+J(\theta) &= -\sum_{i=1}^{m}y^{(i)}[\ln(h_\theta(x^{(i)}))] + (1-y^{(i)}) \ln(+h_\theta(x^{(i)}))\\
+J(\theta) &= -\sum_{i=1}^{m}y^{(i)}\Bigg[\ln\Bigg(\frac{1}{1+e^{-\theta x^{(i)}}}\Bigg)\Bigg] + (1-y^{(i)}) \ln\Bigg(\frac{e^{-x^{(i)}\theta^T}}{1+e^{-x^{(i)}\theta^T}}\Bigg)\\
+J(\theta) &= -\sum_{i=1}^{m}y^{(i)}\Bigg[\ln\Bigg(\frac{1}{1+e^{-\theta x^{(i)}}}\Bigg)-\ln\Bigg(\frac{e^{-x^{(i)}\theta^T}}{1+e^{x^{(i)}\theta^T}}\Bigg)\Bigg] + \ln\Bigg(\frac{e^{-x^{(i)}\theta^T}}{1+e^{-x^{(i)}\theta^T}}\Bigg)\\
+J(\theta) &= -\sum_{i=1}^{m}y^{(i)}\ln(e^{x^{(i)}\theta^T}) + \ln((1+e^{x^{(i)}}\theta^T)^{-1})\\
+J(\theta) &= -\sum_{i=1}^{m}y^{(i)}x^{(i)}\theta^T-\ln(1+e^{x^{(i)}\theta^T})\\
+J(\theta) &= \sum_{i=1}^{m}y^{(i)}x^{(i)}\theta^T+\ln(1+e^{x^{(i)}\theta^T})\\
+\end{align*}
+\[
+J^{(i)}\theta^T\qquad\frac{\partial J^{(i)}}{\partial\theta_j}= x_j^{(i)}
+\]
+\begin{align*}
+	\frac{\partial J(\theta)}{\partial\theta_j}&=\sum_{i=1}^{m}-y^{(i)} \frac{\partial}{\partial\theta_j}J^{(i)}+\frac{\partial}{\partial\theta_j}\ln(1+e^{J^{(i)}})\\
+	\frac{\partial J(\theta)}{\partial\theta_j}&=\sum_{i=1}^{m}-y^{(i)} x_j^{(i)} + \frac{1}{1+e^{J^{(i)}}}e^{J(i)x_j^{(i)}}\\
+	\frac{J(\theta)}{\partial\theta_j}&=\sum_{i=1}^{m}\Big[-y^{(i)}+h_\theta(x^{(i)})\Big]x^{(i)}_j
+\end{align*}
+\begin{center}
+	\begin{tcolorbox}[
+		colframe = gray, 
+		arc = 3mm, 
+		width = 0.4\textwidth,
+		height = 70pt		
+		]\[
+		\frac{J(\theta)}{\partial\theta_j}&=\sum_{i=1}^{m}\Big[h_\theta(x^{(i)})-y^{(i)}\Big]x_j^{(i)}
+		\]
+	\end{tcolorbox}
+\end{center}
 \section{Descenso de gradiente}
 En esta sección nos ocuparemos de encontrar el parámetro $ \theta $ que minimiza la función $ J(\theta) $. El algoritmo que se usará es muy similar al que usamos en la regresión lineal y es el siguiente.
 \begin{equation}
@@ -809,4 +952,32 @@ jVal = [...code to compute J(theta)...];
 gradient = [...code to compute derivative of J(theta)...];
 end
 \end{lstlisting}
-\end{document}
+
+\chapter{Redes neuronales}
+\section{Introducción}
+
+Hasta el momento hemos conocido dos algoritmos, uno de clasificación y otro de regresión lineal, en este capítulo nos ocuparemos de un tercer algoritmo llamado redes neuronales, éste existe desde hace mucho tiempo, sin embargo hoy en día ha tomado bastante fuerza con la revolución tecnológica ya que tiene bastantes aplicaciones.\\
+
+La importancia de usar redes neuronales es que para muchos problemas de aprendizaje automático, el número de variables es bastante grande y como ya vimos en capítulos anteriores, esto puede ocasionar un problema de \textit{overfitting} a parte de que se vuelve complicado manejar tantas variables.\\ Un ejemplo en el que podemos observar la gran cantidades de variables que se usan en un problema de Machine Learning, es la visión computacional. Cuando una computadora ``ve" una imagen, lo que hace internamente es trabajar sobre una matriz de números que representan la intensidad de cada pixel de dicha imagen. \\
+
+Si tratamos de resolver este problema con el algoritmo de regresión logística, separando las imágenes que son carros de las que no, y suponiendo que tratamos con imágenes pequeñas de 50x50 pixeles, tendríamos una matriz de 2500 variables, esto considerando que las imágenes están en escala de grises, si las trabajamos con colores RGB, tendríamos 7500 variables, hasta este punto podríamos pensar que una computadora como las que tenemos hoy en día pueden trabajar cómodamente con esta cantidad de variables, sin embargo para que nuestra función de hipótesis esté completa tenemos que añadir los terminos cuadráticos y en este punto es donde la cantidad de variables que operamos se dispara a 3 millones, con esta cantidad es claro que el costo para hacer trabajar nuestro algoritmo es enorme, no hay que olvidar que estamos trabajando con imágenes pequeñas, de 50 x 50 pixeles, ahora si trabajamos con imágenes de 100 x 100 pixeles estaríamos operando aproximadamente con 50 millones de variables.
+
+\subsection{Neuronas y el cerebro}
+Las redes neuronales son un algoritmo bastante antiguo, surgió con el objetivo de hacer máquinas que pudieran simular el cerebro. La máquina de aprendizaje más asombrosa que conocemos es el cerebro y de ahí el interés de crear algoritmos que lo imitaran. Las redes neuronales fueron utilizadas en los 80's y 90's, su popularidad disminuyó, a pesar de eso, recientemente han tenido un resurgimiento.\\
+
+Una de las razones de este resurgimiento es la creación de computadoras rápidas y potentes, aunque las redes neuronales es una buena opción sobre regresión logística y regresión lineal, es muy costoso, hoy en día este costo es despreciable en comparación con los recursos computacionales que están al alcance de nuestras manos, esto ha permitido operar redes neuronales de gran escala y, por esto y otras técnicas, las redes neuronales modernas son la técnica más vanguardista para muchas aplicaciones.\\
+
+El cerebro humano puede ver y procesar imágenes, escuchar, aprender a solucionar operaciones matemáticas y muchas otras cosas sorprendentes, pareciera que para poder imitar completamente al cerebro se necesitan diferentes partes de software, es decir un programa que procese imágenes, otro que procese audio, otro que aprenda a resolver operaciones matemáticas, etc. Sin embargo existe la hipótesis de que sólo se requiere de un único algoritmo de aprendizaje para poder imitar completamente al cerebro.\\
+
+Esta hipótesis se basa en que si cortamos la conexión de la corteza auditiva con el oído y la conectamos con el nervio óptico, la corteza que en un principio sólo sabía escuchar, ahora aprenderá a ver. Lo mismo sucede si cortamos la conexión de de la corteza somatosensorial (que se encarga del sentido del tacto) y la conectamos al ojo, aprenderá a ver. Estos comportamientos del cerebro han dado paso a la idea de que si una corteza puede aprender a procesar algo nuevo, también se puede crear un algoritmo que aprenda por sí sólo al estimularlo con nuevos datos diferentes para lo que fue creado en un principio.
+\section{Redes neuronales}
+	Una neurona es una unidad computacional que tiene un número de entradas a través de sus cables de entrada, y realiza algunos cálculos y luego envía sus resultados a otros nodos o a otras neuronas en el cerebro y así suscesivamente. Este es el proceso de todo pensamiento humano, ocurre mientras las neuronas hacen cálculos y pasan mensajes mediante pulsos eléctricos, así es como se manda la información para persivis nuestros sentidos y para el funcionamiento correcto de los músculos.\\
+
+	En una red neuronal artificial las neuronas se modelan como una unidad logística, reciben datos de entrada, los procesan y arrogan un resultado que se puede representar como $ h_\theta(x) $ donde:
+		\[
+			h_\theta(x)=\frac{1}{1+e^{-\theta T}x}
+		\]
+
+	Una red neuronal puede tener varias capas, la primera es llamada \textit{capa de entrada}, la última \textit{capa de salida} y las capas intermedias son conocidas como \textit{capas ocultas}
+\subsection{}
+\end{document} 
